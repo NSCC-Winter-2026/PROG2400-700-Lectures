@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.25)
+project(PROG2400_700_Lectures)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_FLAGS "-static")
+
+add_executable(hello_world hello_world/main.cpp)
