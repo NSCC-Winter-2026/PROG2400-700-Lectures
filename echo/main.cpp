@@ -1,0 +1,21 @@
+#include <iostream>
+#include <string_view>
+
+using namespace std::literals;
+
+int main() {
+    constexpr auto END = "end"sv;
+
+    const auto get_input = []() {
+        std::string input;
+        std::cout << "Enter a line of text ('end' to exit):"sv;
+        std::getline(std::cin, input);
+        return input;
+    };
+
+    std::string user_input;
+    while ((user_input = get_input()) != END) {
+        std::cout << "You typed: "sv << user_input << std::endl;
+    }
+    return 0;
+}
