@@ -9,6 +9,27 @@ class LinkedList {
     Node* _start {nullptr};
 
 public:
+    class iterator {
+        Node* _node {nullptr};
+        int _index {-1};
+
+    public:
+        explicit iterator(Node* node = nullptr) : _node(node) {
+        }
+
+        int operator*() const { return _node->data; }
+
+        iterator& operator++() {
+            _node = _node->next;
+            return *this;
+        }
+
+        bool operator!=(const iterator it) const { return _node != it._node; }
+    };
+
+    [[nodiscard]] iterator begin() const { return iterator(_start); }
+    [[nodiscard]] iterator end() const { return iterator(nullptr); }
+
     void add(int data) {
         auto node = new Node {data};
 
@@ -33,6 +54,36 @@ public:
                 // so, let's add the new node to the end!
                 prev->next = node;
             }
+        }
+    }
+
+    /// inserts a node in the middle of the linked list
+    /// @param data the integer to insert
+    /// @param before the value of the node to insert before
+    void insert(const int data, const int before) {
+        auto node = new Node {data};
+        // find the node to insert before
+        auto curr = _start;
+        auto prev = static_cast<Node*>(nullptr);
+
+        while (curr != nullptr) {
+            // what node am I looking for?
+            if (curr->data == before) break;
+            prev = curr;
+            curr = curr->next;
+        }
+
+        // am I inserting the node at the start?
+        if (prev == nullptr) {
+            // yes!
+            node->next = _start;
+            _start = node;
+        } else {
+            // no.
+
+            // either insert or add to end of list
+            node->next = prev->next;
+            prev->next = node;
         }
     }
 
@@ -105,6 +156,44 @@ int main() {
     std::cout << "Test 3 - delete the first node" << std::endl;
     std::cout << "------------------------------" << std::endl;
     std::cout << list << std::endl;
+
+    // test 4 - can we insert a node a spot in the list
+    // insert the value 6 before the node that contains the value 4
+    list.insert(6, 4);
+
+    std::cout << "Test 4 - insert a node" << std::endl;
+    std::cout << "----------------------" << std::endl;
+    std::cout << list << std::endl;
+
+    // test 5 - what happens when we try to insert before a node that doesn't exist?
+    // insert the value 7 before the node that contains the value 10
+    list.insert(7, 10);
+
+    std::cout << "Test 5 - insert a node before an invalid node" << std::endl;
+    std::cout << "---------------------------------------------" << std::endl;
+    std::cout << list << std::endl;
+
+    // test 6 - insert before the first node
+    // insert the value 12 before the node that contains the value 2
+    list.insert(12, 2);
+
+    std::cout << "Test 6 - insert a node before the first node" << std::endl;
+    std::cout << "--------------------------------------------" << std::endl;
+    std::cout << list << std::endl;
+
+    // test 7 - using a for loop to output node values
+    std::cout << "Test 7 - using a for loop to output node values" << std::endl;
+    std::cout << "-----------------------------------------------" << std::endl;
+
+    for (auto i = list.begin(); i != list.end(); ++i) {
+        std::cout << *i << " ";
+    }
+    std::cout << std::endl;
+
+    for (auto i : list) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
 
     return 0;
 }
