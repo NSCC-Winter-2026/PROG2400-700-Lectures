@@ -42,6 +42,28 @@ public:
             // nope...
             return;
         }
+
+        // does the node have two children?
+        if (node->left != nullptr && node->right != nullptr) {
+            // yes! we have two children (case 3)
+
+            // find a successor to replace the node
+
+            // start on the left branch
+            Node* successor = node->left;
+            // keep traversing right until the bottom of the tree
+            parent = node;
+            while (successor->right != nullptr) {
+                parent = successor;
+                successor = successor->right;
+            }
+
+            // replace node with successor
+            node->data = successor->data;
+            // the successor is now the node to delete
+            node = successor;
+        }
+
         // assume the node has a left child
         Node* subtree = node->left;
 
@@ -53,6 +75,7 @@ public:
         // is the node to delete on the left-side or right-side of the parent?
         if (parent == nullptr) {
             // the node has no parent...
+            _root = subtree;
         } else if (node == parent->left) {
             // on the left! connect child to parent's left side
             parent->left = subtree;
@@ -126,6 +149,30 @@ int main() {
 
     bst.remove(3);
 
+    std::cout << bst << std::endl;
+
+    // test 4 - delete node with two children
+    std::cout << "Test 4 : delete node with two children" << std::endl;
+    std::cout << "--------------------------------------" << std::endl;
+
+    bst.remove(7);
+
+    std::cout << bst << std::endl;
+
+    // test 5 - delete remaining nodes
+    std::cout << "Test 5 : delete remaining nodes" << std::endl;
+    std::cout << "-------------------------------" << std::endl;
+
+    bst.remove(4);
+    std::cout << bst << std::endl;
+
+    bst.remove(5);
+    std::cout << bst << std::endl;
+
+    bst.remove(6);
+    std::cout << bst << std::endl;
+
+    bst.remove(8);
     std::cout << bst << std::endl;
 
     return 0;
